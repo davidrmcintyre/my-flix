@@ -1,0 +1,12 @@
+URL: /
+Timestamp: Thu Apr 13 2023 16:25:43 GMT+0200 (Central European Summer Time)
+
+URL: /favicon.ico
+Timestamp: Thu Apr 13 2023 16:25:44 GMT+0200 (Central European Summer Time)
+
+URL: /documentation
+Timestamp: Thu Apr 13 2023 16:37:26 GMT+0200 (Central European Summer Time)
+
+URL: /favicon.ico
+Timestamp: Thu Apr 13 2023 16:37:26 GMT+0200 (Central European Summer Time)
+
