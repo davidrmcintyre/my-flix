@@ -387,7 +387,7 @@ app.get('/movies/genre/:genreName', (req, res) => {
     movie.Genres.some((genre) => genre.Name === genreName)
   );
   if (movies.length > 0) {
-    res.status(200).json(movies.map(movie => ({Title: movie.Title, Genres: movie.Genres.filter(genre => genre.Name === genreName)})));
+    res.status(200).json(movies);
   } else {
     res.status(404).send(`No movies found with genre "${genreName}"`);
   }
