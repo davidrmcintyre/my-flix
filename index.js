@@ -214,10 +214,13 @@ let myMovies = [
           "dateOfBirth": 3905
       },
       "Year": 2014,
-      "Genres": {
+      "Genres": [{
           "Name": "Drama",
           "Description": "Drama films are a genre that relies on the emotional and relational development of realistic characters. They often feature intense character development, and sometimes rely on tragedy to evoke an emotional response from the audience."
       },
+        {
+          "Name": ""
+      }],
       "ImageURL": "https://www.themoviedb.org/t/p/w1280/na05HMiEEftqzBFnBOtqAgAr7zz.jpg",
       "Featured": false
   },
@@ -286,6 +289,7 @@ app.post('/users', (req, res) => {
   const newUser = req.body;
   if (newUser.name){
     newUser.id = uuid.v4();
+    newUser.favoriteMovies = [];
     users.push(newUser);
     res.status(201).json(newUser)
   } else {
@@ -367,7 +371,7 @@ app.get('/movies/:title', (req, res) => {
 });
 
 // READ
-app.get('/movies/genre/:genreName', (req, res) => {
+/*app.get('/movies/genre/:genreName', (req, res) => {
   const { genreName } = req.params;
   const genre = myMovies.find(movie => movie.Genres.Name === genreName ).Genres;
   if (genre) {
@@ -375,7 +379,23 @@ app.get('/movies/genre/:genreName', (req, res) => {
   } else {
     res.status(404).send(`No such genre`)
   }
+}); */
+
+app.get('/movies/genre/:genreName', (req, res) => {
+  const genreName = req.params.genreName;
+  const movies = myMovies.filter((movie) =>
+    movie.Genres.some((genre) => genre.Name === genreName)
+  );
+  if (movies.length > 0) {
+    res.status(200).json(movies.map(movie => ({Title: movie.Title, Genres: movie.Genres.filter(genre => genre.Name === genreName)})));
+  } else {
+    res.status(404).send(`No movies found with genre "${genreName}"`);
+  }
 });
+
+
+
+
 
 // READ
 app.get('/movies/director/:name', (req, res) => {
