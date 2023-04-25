@@ -1,0 +1,30 @@
+
+
+body {
+    max-width: 95%;
+    background-color: #fbfbfb;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    padding: 20px;
+  }
+  
+  th, td {
+    text-align: left;
+    padding: 10px;
+    border: 5px solid #ddd;
+  }
+
+  tr {
+    border-radius: 15px;
+  }
+  
+  th {
+    background-color: #f2f2f2;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }

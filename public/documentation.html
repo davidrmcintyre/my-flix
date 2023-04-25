@@ -1,11 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta charset="UTF-8">
-        <title>My Flix App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>My Flix App</title>
+    <link rel="stylesheet" href="styles.css">
     </head>
     <body>
-        <h1>Documentation Page</h1>
-    </body>
+    <h1>My Flix API Documentation</h1>
+    <h2>HTTP Method, Requests and Responses:</h2>
+    <table>
+        <thead>
+          <tr>
+            <th>HTTP Method</th>
+            <th>URL</th>
+            <th>Request</th>
+            <th>Request Body Format</th>
+            <th>Response Body Format</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>POST</td>
+            <td>/users</td>
+            <td>Register as new user</td>
+            <td>JSON object with new user details</td>
+            <td>JSON object with data about added user</td>
+          </tr>
+          <tr>
+            <td>PUT</td>
+            <td>/users/:id</td>
+            <td>User updates their user information</td>
+            <td>JSON object with updated user details</td>
+            <td>JSON object with data about updated user</td>
+          </tr>
+          <tr>
+            <td>POST</td>
+            <td>/users/:id/:movieTitle</td>
+            <td>User adds movie to list of favorites</td>
+            <td>None</td>
+			<td>JSON object with user data including movie ID that was added to favorites</td>
+          </tr>
+          <tr>
+            <td>DELETE</td>
+            <td>/users/:id/:movieTitle</td>
+            <td>User removes movie from list of favorites</td>
+            <td>None</td>
+			<td>JSON object with user data showing movie ID that was removed from favorites has been removed</td>
+          </tr>
+          <tr>
+            <td>DELETE</td>
+            <td>/users/:id</td>
+            <td>Deletes an exitsing user</td>
+            <td>None</td>
+			<td>Message indicating account has been deleted or was not found</td>
+          </tr>
+          <tr>
+            <td>GET</td>
+            <td>/movies</td>
+            <td>Get a list of all movies</td>
+            <td>None</td>
+			<td>JSON object with data about all movies</td>
+          </tr>
+          <tr>
+            <td>GET</td>
+            <td>/movies/:title</td>
+            <td>Get details for a specific movie</td>
+            <td>None</td>
+			<td>JSON object with data about a single movie</td>
+          </tr>
+          <tr>
+            <td>GET</td>
+            <td>/movies/genre/:genreName</td>
+            <td>Get information on a specific genre</td>
+            <td>None</td>
+			<td>JSON object with data about a single genre</td>
+          </tr>
+          <tr>
+            <td>GET</td>
+            <td>/movies/director/:name</td>
+            <td>Get information about a specific director</td>
+            <td>None</td>
+			<td>JSON object with data about a single director</td>
+          </tr>
+        </tbody>
+      </table>
+      </body>
 </html>
