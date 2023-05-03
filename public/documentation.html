@@ -28,29 +28,43 @@
             <td>JSON object with data about added user</td>
           </tr>
           <tr>
+            <td>GET</td>
+            <td>/users/</td>
+            <td>Returns information on all users</td>
+            <td>None</td>
+            <td>JSON object with data about users</td>
+          </tr>
+          <tr>
+            <td>GET</td>
+            <td>/users/:username</td>
+            <td>Returns information on a user specific username</td>
+            <td>None</td>
+            <td>JSON object with data about user</td>
+          </tr>
+          <tr>
             <td>PUT</td>
-            <td>/users/:id</td>
+            <td>/users/:username</td>
             <td>User updates their user information</td>
             <td>JSON object with updated user details</td>
             <td>JSON object with data about updated user</td>
           </tr>
           <tr>
             <td>POST</td>
-            <td>/users/:id/:movieTitle</td>
+            <td>/users/:username/movies/:MovieID</td>
             <td>User adds movie to list of favorites</td>
             <td>None</td>
 			<td>JSON object with user data including movie ID that was added to favorites</td>
           </tr>
           <tr>
             <td>DELETE</td>
-            <td>/users/:id/:movieTitle</td>
+            <td>/users/:username/movies/:MovieID</td>
             <td>User removes movie from list of favorites</td>
             <td>None</td>
 			<td>JSON object with user data showing movie ID that was removed from favorites has been removed</td>
           </tr>
           <tr>
             <td>DELETE</td>
-            <td>/users/:id</td>
+            <td>/users/:username'</td>
             <td>Deletes an exitsing user</td>
             <td>None</td>
 			<td>Message indicating account has been deleted or was not found</td>
@@ -78,7 +92,7 @@
           </tr>
           <tr>
             <td>GET</td>
-            <td>/movies/director/:name</td>
+            <td>/movies/director/:lastName</td>
             <td>Get information about a specific director</td>
             <td>None</td>
 			<td>JSON object with data about a single director</td>
