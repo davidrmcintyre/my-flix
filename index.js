@@ -8,9 +8,12 @@ mongoose = require('mongoose'),
 app = express(),
 Models = require('./models.js');
 
+app.use(bodyParser.urlencoded({ extended: true }));
+
 const Movies = Models.Movie;
 const Users = Models.User;
 
+app.use(bodyParser.json());
 let auth = require('./auth')(app);
 const passport = require('passport');
 require('./passport');
@@ -26,7 +29,7 @@ app.use(morgan('combined', {stream: accessLogStream}));
 
 app.use(express.static('public'));
 app.use(morgan('common'));
-app.use(bodyParser.json());
+
 
 app.get('/', (req, res) => {
   res.send('Welcome to my movie API!');
@@ -66,7 +69,7 @@ app.post('/users', (req, res) => {
 
 // Get all users
 
-app.get('/users', (req, res) => {
+app.get('/users', passport.authenticate('jwt', { session: false }), (req, res) => {
   Users.find()
     .then((users) => {
       res.status(201).json(users);
@@ -79,7 +82,7 @@ app.get('/users', (req, res) => {
 
 // get a user by their username
 
-app.get('/users/:Username', (req, res) => {
+app.get('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
   Users.findOne({ Username: req.params.Username})
   .then((user) => {
     res.json(user);
@@ -92,7 +95,7 @@ app.get('/users/:Username', (req, res) => {
 
 // UPDATE a users info by username
 
-app.put('/users/:Username', (req, res) => {
+app.put('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
 	Users.findOneAndUpdate(
 		{ Username: req.params.Username },
 		{
@@ -121,7 +124,7 @@ app.put('/users/:Username', (req, res) => {
 // CREATE
 // Add a movie to a user's list of favorites
 
-app.post('/users/:Username/movies/:MovieID', (req, res) => {
+app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { session: false }), (req, res) => {
 	Users.findOneAndUpdate(
 		{ Username: req.params.Username },
 		{
@@ -143,7 +146,7 @@ app.post('/users/:Username/movies/:MovieID', (req, res) => {
 });
 
 // DELETE a movie by movie ID
-app.delete('/users/:Username/movies/:MovieID', (req, res) => {
+app.delete('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { session: false }), (req, res) => {
 	Users.findOneAndUpdate(
 		{ Username: req.params.Username },
 		{
@@ -166,7 +169,7 @@ app.delete('/users/:Username/movies/:MovieID', (req, res) => {
 
 // DELETE
 // Delete a user by username
-app.delete('/users/:Username', (req, res) => {
+app.delete('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
   Users.findOneAndRemove({ Username: req.params.Username })
     .then((user) => {
       if (!user) {
@@ -196,7 +199,7 @@ app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) 
 
 // Get information about a movie by its title
 
-app.get('/movies/:Title', (req, res) => {
+app.get('/movies/:Title', passport.authenticate('jwt', { session: false }), (req, res) => {
 Movies.findOne({ Title: req.params.Title})
 .then((movie) => {
   res.json(movie);
@@ -209,7 +212,7 @@ Movies.findOne({ Title: req.params.Title})
 
 //Get data aboout all movies with a specific genre
 
-app.get('/movies/genre/:Genres', (req, res) => {
+app.get('/movies/genre/:Genres', passport.authenticate('jwt', { session: false }), (req, res) => {
 	Movies.find({ 'Genres.Name': req.params.Genres })
 		.then((movies) => {
 			if (movies.length == 0) {
@@ -226,7 +229,7 @@ app.get('/movies/genre/:Genres', (req, res) => {
 
 // Get data about a genre by genre name
 
-app.get('/movies/genredescription/:Genres', (req, res) => {
+app.get('/movies/genredescription/:Genres', passport.authenticate('jwt', { session: false }), (req, res) => {
 	Movies.findOne({ 'Genres.Name': req.params.Genres })
 		.then((movie) => {
 			if (!movie) {
@@ -243,7 +246,7 @@ app.get('/movies/genredescription/:Genres', (req, res) => {
 
 // get info on a director by name
 
-app.get('/movies/director/:Director', (req, res) => {
+app.get('/movies/director/:Director', passport.authenticate('jwt', { session: false }), (req, res) => {
 	Movies.findOne({ 'Director.lastName': req.params.Director })
 		.then((movie) => {
 			if (!movie) {
