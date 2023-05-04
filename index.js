@@ -5,14 +5,19 @@ path = require('path'),
 bodyParser = require('body-parser'),
 uuid = require('uuid'),
 mongoose = require('mongoose'),
+app = express(),
 Models = require('./models.js');
 
 const Movies = Models.Movie;
 const Users = Models.User;
 
+let auth = require('./auth')(app);
+const passport = require('passport');
+require('./passport');
+
 mongoose.connect('mongodb://localhost:27017/cfDB', { useNewUrlParser: true, useUnifiedTopology: true });
 
-const app = express();
+
 
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {flags: 'a'});
 app.use(morgan('combined', {stream: accessLogStream}));
@@ -178,7 +183,7 @@ app.delete('/users/:Username', (req, res) => {
 
 // Get all movies
 
-app.get('/movies', (req, res) => {
+app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
   Movies.find()
     .then((movies) => {
       res.status(201).json(movies);
