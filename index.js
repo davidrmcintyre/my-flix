@@ -74,8 +74,8 @@ app.get('/users', (req, res) => {
 
 // get a user by their username
 
-app.get('/users/:username', (req, res) => {
-  Users.findOne({ username: req.params.username})
+app.get('/users/:Username', (req, res) => {
+  Users.findOne({ Username: req.params.Username})
   .then((user) => {
     res.json(user);
   })
@@ -87,14 +87,14 @@ app.get('/users/:username', (req, res) => {
 
 // UPDATE a users info by username
 
-app.put('/users/:username', (req, res) => {
+app.put('/users/:Username', (req, res) => {
 	Users.findOneAndUpdate(
-		{ username: req.params.username },
+		{ Username: req.params.Username },
 		{
 			$set: {
-				Username: req.body.username,
-				Password: req.body.password,
-				Email: req.body.email,
+				Username: req.body.Username,
+				Password: req.body.Password,
+				Email: req.body.Email,
 				Birthday: req.body.Birthday,
 			},
 		},
@@ -116,9 +116,9 @@ app.put('/users/:username', (req, res) => {
 // CREATE
 // Add a movie to a user's list of favorites
 
-app.post('/users/:username/movies/:MovieID', (req, res) => {
+app.post('/users/:Username/movies/:MovieID', (req, res) => {
 	Users.findOneAndUpdate(
-		{ username: req.params.username },
+		{ Username: req.params.Username },
 		{
 			$addToSet: { FavoriteMovies: req.params.MovieID },
 		},
@@ -138,9 +138,9 @@ app.post('/users/:username/movies/:MovieID', (req, res) => {
 });
 
 // DELETE a movie by movie ID
-app.delete('/users/:username/movies/:MovieID', (req, res) => {
+app.delete('/users/:Username/movies/:MovieID', (req, res) => {
 	Users.findOneAndUpdate(
-		{ username: req.params.username },
+		{ Username: req.params.Username },
 		{
 			$pull: { FavoriteMovies: req.params.MovieID },
 		},
@@ -236,10 +236,6 @@ app.get('/movies/genredescription/:Genres', (req, res) => {
 		});
 });
 
-
-
-
-
 // get info on a director by name
 
 app.get('/movies/director/:Director', (req, res) => {
@@ -256,10 +252,6 @@ app.get('/movies/director/:Director', (req, res) => {
 			res.status(500).send('Error: ' + err);
 		});
 });
-
-
-
-
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
