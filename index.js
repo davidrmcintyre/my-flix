@@ -1,13 +1,12 @@
 const express = require('express'),
-morgan = require('morgan'),
+mongoose = require('mongoose'),
 fs = require('fs'),
 path = require('path'),
 bodyParser = require('body-parser'),
 uuid = require('uuid'),
-mongoose = require('mongoose'),
 app = express(),
 Models = require('./models.js');
-
+mongoose.connect('mongodb://localhost:27017/cfDB', { useNewUrlParser: true, useUnifiedTopology: true });
 const { check, validationResult } = require('express-validator');
 
 const cors = require('cors');
@@ -15,6 +14,7 @@ app.use(cors());
 
 //Middleware
 
+morgan = require('morgan'),
 app.use(express.static('public'));
 app.use(morgan('common'));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -29,7 +29,7 @@ let auth = require('./auth')(app);
 const passport = require('passport');
 require('./passport');
 
-mongoose.connect('mongodb://localhost:27017/cfDB', { useNewUrlParser: true, useUnifiedTopology: true });
+
 
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {flags: 'a'});
 app.use(morgan('combined', {stream: accessLogStream}));
@@ -59,7 +59,8 @@ let errors = validationResult(req);
 if (!errors.isEmpty()) {
   return res.status(422).json({ errors: errors.array() });
 }
-  let hashedPassword = Users.hashpassword(req.body.password);
+	console.log(Users);
+  let hashedPassword = Users.hashPassword(req.body.Password);
   Users.findOne({ Username: req.body.Username }) // searches to find if the user already exists
     .then((user) => {
       if (user) {
@@ -120,38 +121,42 @@ app.put('/users/:Username', passport.authenticate('jwt', { session: false }),
   check('Username', 'Username is required').isLength({min: 5}),
   check('Username', 'Username contains non alphanumeric characters - not allowed').isAlphanumeric(),
   check('Password', 'Password is required').not().isEmpty(),
-  check('Email', 'Email does not appear to be valid').isEmail()
+  check('Email', 'Email is not valid').isEmail().normalizeEmail()
 ],
 (req, res) => {
-	let errors = validationResult(req);
-	let hashedPassword = Users.hashpassword(req.body.password);
-if (!errors.isEmpty()) {
-  return res.status(422).json({ errors: errors.array() });
-}
-	Users.findOneAndUpdate(
-		{ Username: req.params.Username },
-		{
-			$set: {
-				Username: req.body.Username,
-				Password: hashedPassword,
-				Email: req.body.Email,
-				Birthday: req.body.Birthday,
-			},
-		},
-		{ new: true }
-	)
-		.then((user) => {
-			if (!user) {
-				return res.status(404).send('Error: No user was found');
-			} else {
-				res.json(user);
-			}
-		})
-		.catch((err) => {
-			console.error(err);
-			res.status(500).send('Error: ' + err);
-		});
+  let errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+
+  let hashedPassword = Users.hashPassword(req.body.Password);
+
+  Users.findOneAndUpdate(
+    { Username: req.params.Username },
+    {
+      $set: {
+        Username: req.body.Username,
+        Password: hashedPassword,
+        Email: req.body.Email,
+        Birthday: req.body.Birthday,
+      },
+    },
+    { new: true }
+  )
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send('Error: No user was found');
+      } else {
+        res.json(user);
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
 });
+
 
 // CREATE
 // Add a movie to a user's list of favorites

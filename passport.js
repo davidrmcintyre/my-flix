@@ -17,15 +17,15 @@ passport.use(
       console.log(username + ' ' + password);
       Users.findOne({ Username: username })
         .then((user) => {
-          if (!user) {
-            console.log("incorrect username");
-            return callback(null, false, { message: "Incorrect username or password." });
+          if (!user.validatePassword(password)) {
+            console.log("incorrect password");
+            return callback(null, false, { message: "Incorrect password." });
           }
           return callback(null, user);
         })
         .catch((error) => {
             console.log(error);
-            return callback(error, false);
+            return callback(error, false, { message: 'Incorrect Username of Password'});
         });
     }
   )
